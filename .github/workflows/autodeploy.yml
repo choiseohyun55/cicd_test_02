@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
 jobs:
   build-job:
     runs-on: ubuntu-latest
@@ -19,13 +18,16 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: application yml 추가하기
+      - name: application yml 추가
         run: |
-          mkdir  -p src/main/resources || true
+          mkdir -p src/main/resources || true
           echo "${{secrets.APPLICATION_YML}}" > ./src/main/resources/application.yml
           cat ./src/main/resources/application.yml
 
       - name: jar 파일 생성(build)
+        run: |
+          chmod +x ./gradlew # 실행권한 추가
+          ./gradlew clean build 
 
       - name: 빌드된 jar 파일 이름변경 및 이동
         run: |
